@@ -1,0 +1,22 @@
+# WARNING: DO NOT USE THIS CONTAINER IN PRODUCTION, IT IS INSECURE!
+
+FROM nlpbox/nlpbox-base:16.04
+
+RUN apt-get update -y && apt-get upgrade -y && \
+    apt-get install python-pip phantomjs apache2 elinks -y && \
+    pip2 install cherrypy selenium
+
+WORKDIR /opt
+RUN git clone https://github.com/amir-zeldes/rstWeb.git && \
+    mv rstWeb rstweb
+
+# start_local.py is not intended to be run as a server, so we have to change
+# its IP address to make it work inside a docker container.
+WORKDIR /opt/rstweb
+RUN head -n -1 start_local.py > start_local_docker.py && \
+    echo "cherrypy.server.socket_host = '0.0.0.0'" >> start_local_docker.py && \
+    echo "cherrypy.quickstart(Root(), '/', conf)" >> start_local_docker.py
+
+EXPOSE 8080
+ENTRYPOINT ["python"]
+CMD ["start_local_docker.py"]
