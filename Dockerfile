@@ -21,8 +21,6 @@ RUN ln -s ../sites-available/rstweb.apache.conf . && \
     newgrp www-data && \
     service apache2 restart
 
-ADD start_rstweb_apache.sh /opt/rstweb/
-
 EXPOSE 80
 CMD /usr/sbin/apache2ctl -D FOREGROUND
 
