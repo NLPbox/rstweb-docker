@@ -23,11 +23,3 @@ RUN ln -s ../sites-available/rstweb.apache.conf . && \
 
 EXPOSE 80
 CMD /usr/sbin/apache2ctl -D FOREGROUND
-
-
-
-
-
-
-
-
